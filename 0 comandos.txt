@@ -1,0 +1,4 @@
+generar json --- npm init -y
+
+ependencias:
+npm i express dotenv
