@@ -1,13 +1,16 @@
 const { Router } = require('express');
 const { check } = require('express-validator');
+
 const { 
     usuariosGet, 
     usuariosPut, 
     usuariosPost, 
     usuariosPatch, 
     usuariosDelete } = require('../Controllers/users');
+
 const { esRoleValido, emailExiste,existeUsuarioPorId } = require('../helpers/db-validators');
-const { validarCampos } = require('../middlewares/validar-campos');
+
+const {validarCampos,validarJWT,esAdminRole,tieneRole} = require('../middlewares');
 
 const router = Router();
 
@@ -34,7 +37,12 @@ router.post('/',[ //middleware, los middlewares son funciuones que se ejecutan a
 
 router.patch('/',usuariosPatch);
 
+router.post('/auti',usuariosPatch);
+
 router.delete('/:id',[
+    validarJWT,
+    //esAdminRole,
+    tieneRole('ADMIN_ROLE','VENTAS_ROLE'),
     check('id','No es un ID valido').isMongoId().bail(),
     check('id').custom(existeUsuarioPorId).bail(),
     validarCampos
