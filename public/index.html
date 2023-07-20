@@ -6,76 +6,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Google Sing In</title>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
-<body>
+<body class="container">
 
    
-    <div id="g_id_onload"
-       data-client_id="1059277979949-ok6i84l60abj68ukndn2l8nmr5suqkqh.apps.googleusercontent.com"
-       data-auto_prompt="false"
-       data-callback="handleCredentialResponse">
-       
-    </div>
-    <div class="g_id_signin"
-       data-type="standard"
-       data-size="large"
-       data-theme="outline"
-       data-text="sign_in_with"
-       data-shape="rectangular"
-       data-logo_alignment="left">
-    </div>
-
-    
-
-    <h1>Google Sing In</h1>
+ <div class="row mt-5">
+   <div class="col-sm-6 mb-2">
+      <h1>Google Sing In</h1>
 
 
-    <button id="googleSingOut">
-      SingOut
-    </button>
+      <div id="g_id_onload"
+         data-client_id="1059277979949-ok6i84l60abj68ukndn2l8nmr5suqkqh.apps.googleusercontent.com"
+         data-auto_prompt="false"
+         data-callback="handleCredentialResponse">
+         
+      </div>
+      <div class="g_id_signin mt-1"
+         data-type="standard"
+         data-size="large"
+         data-theme="outline"
+         data-text="sign_in_with"
+         data-shape="rectangular"
+         data-logo_alignment="left">
+      </div>
+     
+     
+         <button class="mt-1" id="googleSingOut">
+           SingOut
+         </button>
+     
+   </div>
 
-
-
-
-
-
-
-
-
-
-
-
-    <script>
-        function handleCredentialResponse(response) {
-           // decodeJwtResponse() is a custom function defined by you
-           // to decode the credential response.
-
-           //GOOGLE TOKEN : ID_TOKEN
-          /*  const responsePayload = decodeJwtResponse(response.credential); */
-           const body = {id_token: response.credential}
-
-           fetch('http://localhost:8081/api/auth/google',{
-               method: 'POST',
-               headers:{
-                  'Content-Type':'application/json'
-               },
-               body: JSON.stringify(body)
-           })
-            .then(resp => resp.json())
-            .then(resp => {console.log(resp),localStorage.setItem('email',resp.usuario.correo)})
-            .catch(console.warn)
-           console.log('Id Token : ', response.credential);
-        }
-
-        const button = document.getElementById('googleSingOut');
-        button.onclick = () =>{
-            console.log(google.accounts.id);
-            google.accounts.id.disableAutoSelect()
-            google.accounts.id.revoke(localStorage.getItem('email'),done =>{
-               localStorage.clear();
-               location.reload();
-            });
-        }
-      </script>
+   <div class="col-sm-6">
+         <h1>Login con correo</h1>
+         <form class="d-grid">
+            <input type="text" name="correo" class="form-control mb-2" placeholder="correo">
+            <input type="password" name="password" class="form-control mb-2" placeholder="contraseña">
+            <button type="submit" class="btn btn-primary">
+               Ingresar
+            </button>
+         </form>
+         
+   </div>
+ </div>
+    <script src="./js/auth.js" ></script>
 </body>
 </html>
